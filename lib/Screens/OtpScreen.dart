@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'package:chatapp/Model/user.dart';
 import 'package:chatapp/Screens/LoginScreen.dart';
+import 'package:chatapp/Screens/newuserscreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,10 +11,13 @@ import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
 
 class OtpScreen extends StatefulWidget {
+  final String verificationId;
+  final String phoneNumber;
 
-  final  String verificationId;
+  const OtpScreen(
+      {Key? key, required this.verificationId, required this.phoneNumber})
+      : super(key: key);
 
-  const OtpScreen({Key? key, required this.verificationId}) : super(key: key);
   @override
   State<OtpScreen> createState() => _OtpScreenState();
 }
@@ -24,7 +30,6 @@ class _OtpScreenState extends State<OtpScreen> {
   bool enableResend = false;
   Timer? timer;
 
-
   Future<bool> _verifyOtp(String otp) async {
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
@@ -33,6 +38,12 @@ class _OtpScreenState extends State<OtpScreen> {
       );
       await _auth.signInWithCredential(credential);
       // Successfully signed in with OTP
+      if (_auth.currentUser?.uid != null) {
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(_auth.currentUser?.uid ?? "")
+            .set(ChatUser(mobile: widget.phoneNumber).toJson());
+      }
       return _auth.currentUser?.uid != null;
       print("User signed in with OTP");
     } catch (e) {
@@ -108,7 +119,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 width: MediaQuery.of(context).size.width,
                 fieldWidth: 36,
                 fieldStyle: FieldStyle.underline,
-                style: TextStyle(fontSize: 28, color: Colors.white),
+                style: TextStyle(fontSize: 28, color: Colors.black),
                 textFieldAlignment: MainAxisAlignment.spaceAround,
                 onCompleted: (pin) {
                   otp = pin;
@@ -123,17 +134,24 @@ class _OtpScreenState extends State<OtpScreen> {
               child: ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        Colors.white,
+                    Colors.white,
                   )),
-                  onPressed: () async{
-                    if(await _verifyOtp(otp)){
-                      Navigator.pushAndRemoveUntil(context,
-                          MaterialPageRoute(builder: (_) => LoginScreen()), (route) => false);
+                  onPressed: () async {
+                    if (await _verifyOtp(otp)) {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) =>
+                                  NewUserScreen(_auth.currentUser?.uid.toString() ?? "")),
+                          (route) => false);
                     }
                   },
                   child: Text(
                     "FINISH",
-                    style: TextStyle(fontSize: 22,color: Color(0xff004AAD),fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 22,
+                        color: Color(0xff004AAD),
+                        fontWeight: FontWeight.bold),
                   )),
             ),
             TextButton(
