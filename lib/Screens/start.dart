@@ -17,28 +17,30 @@ class _StartScreenState extends State<StartScreen> {
   TextEditingController phoneController = TextEditingController();
 
   Future<void> _verifyPhoneNumber(String phoneNumber) async {
-    await _auth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        // Automatically sign in the user if the SMS code is sent successfully
-        await _auth.signInWithCredential(credential);
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        // Handle verification failure (e.g., invalid phone number)
-        print("Verification Failed: ${e.message}");
-      },
-      codeSent: (String verificationId, int? resendToken) {
-        // Store the verification ID for later use
-        _verificationId = verificationId;
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => OtpScreen(verificationId: _verificationId)));
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        // Called when the automatic code retrival times out
-      },
-    );
+
+      await _auth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          // Automatically sign in the user if the SMS code is sent successfully
+          await _auth.signInWithCredential(credential);
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          // Handle verification failure (e.g., invalid phone number)
+          print("Verification Failed: ${e.message}");
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          // Store the verification ID for later use
+          _verificationId = verificationId;
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => OtpScreen(verificationId: _verificationId,phoneNumber: phoneNumber,)));
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          // Called when the automatic code retrival times out
+        },
+      );
+
   }
 
   @override
@@ -85,14 +87,9 @@ class _StartScreenState extends State<StartScreen> {
                 child: InternationalPhoneNumberInput(
                   //dialogConfig: DialogConfig(backgroundColor: Colors.black),
                   controller: phoneController,
-
+                  initCountry: CountryCodeModel(
+                      name: "India", dial_code: "+91", code: "IN"),
                   countryConfig: CountryConfig(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 2.0,
-                        color: Colors.white,
-                      ),
-                    ),
                     textStyle: TextStyle(
                         color: Colors.white, backgroundColor: Colors.cyan),
                     flagSize: 30.0,
@@ -101,14 +98,8 @@ class _StartScreenState extends State<StartScreen> {
                   betweenPadding: 4,
                   height: 70,
                   phoneConfig: PhoneConfig(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 2.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    //   focusedColor: Colors.white,
-                    // enabledColor: Colors.white,
+                    focusedColor: Colors.white,
+                    enabledColor: Colors.white,
                     textStyle: TextStyle(color: Colors.white),
                     hintText: "      MOBILE NUMBER",
                   ),
@@ -116,7 +107,7 @@ class _StartScreenState extends State<StartScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 116, vertical: 50),
+              padding: EdgeInsets.symmetric(horizontal: 100, vertical: 30),
               child: ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
@@ -130,7 +121,10 @@ class _StartScreenState extends State<StartScreen> {
                       "+91" + phoneController.text; // get the phone number;
                   _verifyPhoneNumber(phoneNumber);
                   print(phoneNumber);
+
+
                 },
+
                 child: Center(
                   child: Text(
                     "CONTINUE",
