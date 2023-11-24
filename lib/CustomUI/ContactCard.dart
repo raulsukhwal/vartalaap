@@ -1,6 +1,7 @@
 import 'package:chatapp/Model/ChatModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ContactCard extends StatelessWidget {
   const ContactCard({Key? key, this.contact}) : super(key: key);
@@ -50,10 +51,16 @@ class ContactCard extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        contact?.status ?? "",
+        contact?.phoneNumber ?? "",
         style: TextStyle(
           fontSize: 13,
         ),
+      ),
+      trailing: IconButton(
+        onPressed: () {
+          Share.share('download vartalaap https://i.diawi.com/nQoVkW');
+        },
+        icon: Icon(Icons.share),
       ),
     );
   }

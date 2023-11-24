@@ -92,6 +92,7 @@ class _IndividualPageState extends State<IndividualPage> {
         message: message,
         time: DateTime.now().toString().substring(10, 16));
     print(messages);
+    print(messages);
 
     setState(() {
       messages.add(messageModel);

@@ -1,12 +1,12 @@
 class ChatUser {
-  ChatUser({
-    this.id,
-    this.firstName,
-    this.email,
-    this.lastName,
-    this.mobile,
-    this.chatIds,
-  });
+  ChatUser(
+      {this.id,
+      this.firstName,
+      this.email,
+      this.lastName,
+      this.mobile,
+      this.chatIds,
+      this.gender});
 
   String? id;
   String? firstName;
@@ -14,6 +14,7 @@ class ChatUser {
   String? mobile;
   String? email;
   List<String>? chatIds;
+  String? gender;
 
   factory ChatUser.fromJson(Map<String, dynamic> json) {
     return ChatUser(
@@ -22,6 +23,7 @@ class ChatUser {
       lastName: json["last_name"] ?? "",
       mobile: json["mobile"] ?? "",
       email: json["email"] ?? "",
+      gender: json["gender"],
       chatIds: json["chatIds"] == null
           ? []
           : List<String>.from(json["chatIds"]!.map((x) => x)),
@@ -34,6 +36,7 @@ class ChatUser {
         "last_name": lastName,
         "email": email,
         "mobile": mobile,
-        "chatIds": chatIds!.map((x) => x).toList(),
+        "gender": gender,
+        "chatIds": chatIds?.map((x) => x).toList() ?? [],
       };
 }

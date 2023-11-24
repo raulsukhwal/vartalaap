@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:chatapp/Model/user.dart';
+import 'package:chatapp/Screens/Homescreen.dart';
 import 'package:chatapp/Screens/LoginScreen.dart';
 import 'package:chatapp/Screens/newuserscreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,29 +30,25 @@ class _OtpScreenState extends State<OtpScreen> {
   int secondsRemaining = 30;
   bool enableResend = false;
   Timer? timer;
-
+  ChatUser? user;
 
   Future<bool> _verifyOtp(String otp) async {
-    try {
-      PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: widget.verificationId,
-        smsCode: otp,
-      );
-      await _auth.signInWithCredential(credential);
-      // Successfully signed in with OTP
-      if (_auth.currentUser?.uid != null) {
-        await FirebaseFirestore.instance
-            .collection("users")
-            .doc(_auth.currentUser?.uid ?? "")
-            .set(ChatUser(mobile: widget.phoneNumber).toJson());
-      }
-      return _auth.currentUser?.uid != null;
-      print("User signed in with OTP");
-    } catch (e) {
-      return false;
-      // Handle verification failure
-      print("Verification Failed: ${e.toString()}");
-    }
+    // try {
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: widget.verificationId,
+      smsCode: otp,
+    );
+    await _auth.signInWithCredential(credential);
+    // Successfully signed in with OTP
+
+    return _auth.currentUser?.uid != null;
+    print("User signed in with OTP");
+    // } catch (e) {
+    //   print(e.toString());
+    //   return false;
+    //   // Handle verification failure
+    //   print("Verification Failed: ${e.toString()}");
+    // }
   }
 
   @override
@@ -139,12 +136,40 @@ class _OtpScreenState extends State<OtpScreen> {
                   )),
                   onPressed: () async {
                     if (await _verifyOtp(otp)) {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) =>
-                                  NewUserScreen(_auth.currentUser?.uid.toString() ?? "")),
-                          (route) => false);
+//from here
+                      DocumentSnapshot userSnapshot = await FirebaseFirestore
+                          .instance
+                          .collection("users")
+                          .doc(widget.phoneNumber)
+                          .get();
+
+                      if (userSnapshot.exists) {
+                        // Existing user
+                        // Navigate to chat page for existing users
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (_) => Homescreen()),
+                            (route) => false);
+                      } else {
+                        // New user
+                        // Navigate to sign-in page for new users
+                        setState(() {
+                          user = ChatUser(
+                              mobile: widget.phoneNumber,
+                              id: _auth.currentUser?.uid);
+                        });
+                        await FirebaseFirestore.instance
+                            .collection("users")
+                            .doc(widget.phoneNumber)
+                            .set(user!.toJson());
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => NewUserScreen(
+                                    _auth.currentUser?.uid.toString() ?? "",
+                                    user ?? ChatUser())),
+                            (route) => false);
+                      }
                     }
                   },
                   child: Text(

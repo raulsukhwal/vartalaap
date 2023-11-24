@@ -17,30 +17,31 @@ class _StartScreenState extends State<StartScreen> {
   TextEditingController phoneController = TextEditingController();
 
   Future<void> _verifyPhoneNumber(String phoneNumber) async {
-
-      await _auth.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          // Automatically sign in the user if the SMS code is sent successfully
-          await _auth.signInWithCredential(credential);
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          // Handle verification failure (e.g., invalid phone number)
-          print("Verification Failed: ${e.message}");
-        },
-        codeSent: (String verificationId, int? resendToken) {
-          // Store the verification ID for later use
-          _verificationId = verificationId;
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => OtpScreen(verificationId: _verificationId,phoneNumber: phoneNumber,)));
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          // Called when the automatic code retrival times out
-        },
-      );
-
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        // Automatically sign in the user if the SMS code is sent successfully
+        await _auth.signInWithCredential(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        // Handle verification failure (e.g., invalid phone number)
+        print("Verification Failed: ${e.message}");
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        // Store the verification ID for later use
+        _verificationId = verificationId;
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => OtpScreen(
+                      verificationId: _verificationId,
+                      phoneNumber: phoneNumber,
+                    )));
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        // Called when the automatic code retrival times out
+      },
+    );
   }
 
   @override
@@ -121,10 +122,7 @@ class _StartScreenState extends State<StartScreen> {
                       "+91" + phoneController.text; // get the phone number;
                   _verifyPhoneNumber(phoneNumber);
                   print(phoneNumber);
-
-
                 },
-
                 child: Center(
                   child: Text(
                     "CONTINUE",

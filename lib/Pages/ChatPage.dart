@@ -17,7 +17,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.cyan,
+        backgroundColor: Color(0xff004AAD),
         onPressed: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (builder) => SelectContact()));

@@ -27,7 +27,11 @@ class _SelectContactState extends State<SelectContact> {
     List<ChatModel> contacts = List.generate(
         contactsList.length,
         (index) => ChatModel(
-            name: contactsList[index].displayName, status: "New USer"));
+            name: contactsList[index].displayName,
+            status: "New USer",
+            phoneNumber: contactsList[index].phones.isNotEmpty == true
+                ? contactsList[index].phones.first.number
+                : ""));
 
     return Scaffold(
         appBar: AppBar(
@@ -85,37 +89,41 @@ class _SelectContactState extends State<SelectContact> {
             ),
           ],
         ),
-        body: ListView.builder(
-            itemCount: contacts.length + 2,
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (builder) => CreateGroup()));
-                  },
-                  child: ButtonCard(
-                    icon: Icons.group,
-                    name: "New group",
-                  ),
-                );
-              } else if (index == 1) {
-                return ButtonCard(
-                  icon: Icons.person_add,
-                  name: "New contact",
-                );
-              }
-              return ContactCard(
-                contact: contacts[index - 2],
-              );
-            }));
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (builder) => CreateGroup()));
+                },
+                child: ButtonCard(
+                  icon: Icons.group,
+                  name: "New group",
+                ),
+              ),
+              ButtonCard(
+                icon: Icons.person_add,
+                name: "New contact",
+              ),
+              Column(
+                children: List.generate(
+                    contactsList.length,
+                    (index) => ContactCard(
+                          contact: contacts[index],
+                        )),
+              )
+            ],
+          ),
+        ));
   }
 
   void getContacts() async {
     if (await Permission.contacts.request().isGranted) {
       print("Get Contacts");
       contactsList = await FlutterContacts.getContacts(
-          withProperties: true, withPhoto: true);
+          withProperties: true, withPhoto: true, withAccounts: true);
+      print(contactsList);
       setState(() {});
     }
   }

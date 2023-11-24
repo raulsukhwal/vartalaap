@@ -1,5 +1,6 @@
 class ChatModel {
   String? name;
+  String? phoneNumber;
   String? icon;
   bool? isGroup;
   String? time;
@@ -11,6 +12,7 @@ class ChatModel {
   ChatModel({
     this.name,
     this.icon,
+    this.phoneNumber,
     this.isGroup,
     this.time,
     this.currentMessage,
