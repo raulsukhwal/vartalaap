@@ -277,7 +277,6 @@ class _IndividualPageState extends State<IndividualPage> {
                                       border: InputBorder.none,
                                       hintText: "Type a message",
                                       hintStyle: TextStyle(color: Colors.grey),
-
                                       suffixIcon: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
@@ -317,7 +316,7 @@ class _IndividualPageState extends State<IndividualPage> {
                                 ),
                                 child: CircleAvatar(
                                   radius: 25,
-                                  backgroundColor:Color(0xff004AAD),
+                                  backgroundColor: Color(0xff004AAD),
                                   child: IconButton(
                                     icon: Icon(
                                       sendButton ? Icons.send : Icons.mic,
@@ -374,7 +373,8 @@ class _IndividualPageState extends State<IndividualPage> {
     return Container(
       height: 278,
       width: MediaQuery.of(context).size.width,
-      child: Card(color: Colors.white,
+      child: Card(
+        color: Colors.white,
         margin: const EdgeInsets.all(18.0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Padding(
@@ -389,14 +389,15 @@ class _IndividualPageState extends State<IndividualPage> {
                   SizedBox(
                     width: 40,
                   ),
-                  iconCreation(Icons.camera_alt,Color(0xff004AAD), "Camera",
+                  iconCreation(Icons.camera_alt, Color(0xff004AAD), "Camera",
                       onTap: () {
                     pickImage();
                   }),
                   SizedBox(
                     width: 40,
                   ),
-                  iconCreation(Icons.insert_photo, Color(0xff004AAD), "Gallery"),
+                  iconCreation(
+                      Icons.insert_photo, Color(0xff004AAD), "Gallery"),
                 ],
               ),
               SizedBox(
@@ -409,11 +410,12 @@ class _IndividualPageState extends State<IndividualPage> {
                   SizedBox(
                     width: 40,
                   ),
-                  iconCreation(Icons.location_pin,Color(0xff004AAD), "Location"),
+                  iconCreation(
+                      Icons.location_pin, Color(0xff004AAD), "Location"),
                   SizedBox(
                     width: 40,
                   ),
-                  iconCreation(Icons.person,Color(0xff004AAD), "Contact"),
+                  iconCreation(Icons.person, Color(0xff004AAD), "Contact"),
                 ],
               ),
             ],

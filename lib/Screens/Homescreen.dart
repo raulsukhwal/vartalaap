@@ -96,7 +96,7 @@ class _HomescreenState extends State<Homescreen>
     );
   }
 
-  Future getCamera() async{
+  Future getCamera() async {
     cameras = await availableCameras();
   }
 }

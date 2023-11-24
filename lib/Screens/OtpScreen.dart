@@ -8,8 +8,7 @@ import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
 
 class OtpScreen extends StatefulWidget {
-
-  final  String verificationId;
+  final String verificationId;
 
   const OtpScreen({Key? key, required this.verificationId}) : super(key: key);
   @override
@@ -23,7 +22,6 @@ class _OtpScreenState extends State<OtpScreen> {
   int secondsRemaining = 30;
   bool enableResend = false;
   Timer? timer;
-
 
   Future<bool> _verifyOtp(String otp) async {
     try {
@@ -123,17 +121,22 @@ class _OtpScreenState extends State<OtpScreen> {
               child: ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        Colors.white,
+                    Colors.white,
                   )),
-                  onPressed: () async{
-                    if(await _verifyOtp(otp)){
-                      Navigator.pushAndRemoveUntil(context,
-                          MaterialPageRoute(builder: (_) => LoginScreen()), (route) => false);
+                  onPressed: () async {
+                    if (await _verifyOtp(otp)) {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (_) => LoginScreen()),
+                          (route) => false);
                     }
                   },
                   child: Text(
                     "FINISH",
-                    style: TextStyle(fontSize: 22,color: Color(0xff004AAD),fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 22,
+                        color: Color(0xff004AAD),
+                        fontWeight: FontWeight.bold),
                   )),
             ),
             TextButton(

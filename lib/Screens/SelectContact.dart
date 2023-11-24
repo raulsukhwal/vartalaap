@@ -14,7 +14,6 @@ class SelectContact extends StatefulWidget {
 }
 
 class _SelectContactState extends State<SelectContact> {
-
   List<Contact> contactsList = [];
 
   @override
@@ -25,7 +24,10 @@ class _SelectContactState extends State<SelectContact> {
 
   @override
   Widget build(BuildContext context) {
-    List<ChatModel> contacts = List.generate(contactsList.length, (index) => ChatModel(name: contactsList[index].displayName, status: "New USer"));
+    List<ChatModel> contacts = List.generate(
+        contactsList.length,
+        (index) => ChatModel(
+            name: contactsList[index].displayName, status: "New USer"));
 
     return Scaffold(
         appBar: AppBar(
@@ -109,7 +111,7 @@ class _SelectContactState extends State<SelectContact> {
             }));
   }
 
-  void getContacts() async{
+  void getContacts() async {
     if (await Permission.contacts.request().isGranted) {
       print("Get Contacts");
       contactsList = await FlutterContacts.getContacts(

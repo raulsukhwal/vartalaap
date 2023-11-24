@@ -26,7 +26,9 @@ class CustomCard extends StatelessWidget {
             leading: CircleAvatar(
               radius: 30,
               child: SvgPicture.asset(
-                chatModel?.isGroup == true ? "assets/groups.svg" : "assets/person.svg",
+                chatModel?.isGroup == true
+                    ? "assets/groups.svg"
+                    : "assets/person.svg",
                 color: Colors.white,
                 height: 36,
                 width: 36,
