@@ -47,7 +47,7 @@ class _HomescreenState extends State<Homescreen>
                   value: "New broadcast",
                 ),
                 PopupMenuItem(
-                  child: Text("Whatsapp Web"),
+                  child: Text("Vartalaap Web"),
                   value: "Whatsapp Web",
                 ),
                 PopupMenuItem(
@@ -89,7 +89,7 @@ class _HomescreenState extends State<Homescreen>
             chatmodels: widget.chatmodels,
             sourchat: widget.sourchat,
           ),
-          Text("STATUS"),
+          Text("Groups"),
           Text("Calls"),
         ],
       ),

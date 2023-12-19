@@ -13,14 +13,22 @@ Future<void> main() async {
           apiKey: "AIzaSyCh8QnIirXF9M47w1vdPI7cWbehfWfEIYE",
           appId: "1:117457126969:android:24cd9151b5643adaebafe8",
           messagingSenderId: "117457126969",
-          projectId: "vartalaap-4df32"));
+          projectId: "vartalaap-4df32")
+  );
 
   // cameras = await availableCameras();
 
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  bool _isSignedIn = false;
+  @override
+
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
